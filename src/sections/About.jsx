@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { Compass, Target, Zap, ArrowDown, Sparkles } from "lucide-react";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { Compass, Target, Zap, ArrowRight, Sparkles } from "lucide-react";
 
 const cardsData = [
   {
@@ -54,8 +54,10 @@ const cardsData = [
 
 const About = () => {
   const targetRef = useRef(null);
+  const horizontalScrollRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
-  const [ambientAngle, setAmbientAngle] = useState(0);
+  const [isDraggingState, setIsDraggingState] = useState(false);
+  const dragRef = useRef({ isDragging: false, startX: 0, scrollLeftStart: 0 });
 
   useEffect(() => {
     const handleResize = () => {
@@ -66,124 +68,144 @@ const About = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Ambient automatic sway animation loop (gentle pendulum auto-rotate between left and right)
-  useEffect(() => {
-    let animationFrameId;
-    const animate = (time) => {
-      // Gentle, slow oscillation (sine wave) between -0.4 and +0.4 card index offsets
-      const angle = Math.sin(time * 0.0007) * 0.4;
-      setAmbientAngle(angle);
-      animationFrameId = requestAnimationFrame(animate);
-    };
-    animationFrameId = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animationFrameId);
-  }, []);
-
-  const { scrollYProgress } = useScroll({
-    target: targetRef,
+  const { scrollXProgress } = useScroll({
+    container: horizontalScrollRef,
   });
+
+  // Spring physics overlay to smooth out drag and scroll movements
+  const smoothScrollX = useSpring(scrollXProgress, {
+    stiffness: 250, // very stiff spring for ultra-fast snaps
+    damping: 32,    // adjusted damping to eliminate overshoot
+    mass: 0.15      // ultra-light mass for instant response
+  });
+
+  // Scroll to the middle card (index 2) on mount to preserve the original symmetric 3D curved layout
+  useEffect(() => {
+    if (horizontalScrollRef.current) {
+      const el = horizontalScrollRef.current;
+      // Delay slightly to ensure scrollWidth is fully calculated in layout
+      const timer = setTimeout(() => {
+        const maxScroll = el.scrollWidth - el.clientWidth;
+        el.scrollLeft = maxScroll / 2;
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [isMobile]);
+
+  // Desktop click-and-drag to scroll horizontally
+  const handleMouseDown = (e) => {
+    const el = horizontalScrollRef.current;
+    if (!el) return;
+    dragRef.current = {
+      isDragging: true,
+      startX: e.pageX - el.offsetLeft,
+      scrollLeftStart: el.scrollLeft,
+    };
+    setIsDraggingState(true);
+  };
+
+  const handleMouseLeave = () => {
+    dragRef.current.isDragging = false;
+    setIsDraggingState(false);
+  };
+
+  const handleMouseUp = () => {
+    dragRef.current.isDragging = false;
+    setIsDraggingState(false);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!dragRef.current.isDragging) return;
+    const el = horizontalScrollRef.current;
+    if (!el) return;
+    e.preventDefault();
+    const x = e.pageX - el.offsetLeft;
+    const walk = (x - dragRef.current.startX) * 1.5; // Scroll speed multiplier
+    el.scrollLeft = dragRef.current.scrollLeftStart - walk;
+  };
 
   return (
     <section
       ref={targetRef}
       id="about"
-      className="relative h-[250vh] bg-primary border-t border-white/5"
+      className="relative bg-transparent border-t border-white/5 py-12 md:py-16"
     >
-      {/* Sticky Container */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between py-12 md:py-16 z-10">
+      {/* Content wrapper */}
+      <div className="relative w-full overflow-hidden flex flex-col justify-between py-12 md:py-16 min-h-[620px] md:min-h-[720px] z-10">
         {/* Section Header */}
-        <div className="container mx-auto px-6 md:px-12 text-center z-20">
+        <div className="container mx-auto px-6 md:px-12 text-left z-20">
           <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-[#ea222d] block mb-2">
-            [ 04 / STUDIO IDENTITY ]
+            04 / STUDIO IDENTITY
           </span>
           <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight mb-2">
             OUR PHILOSOPHY & DNA
           </h2>
-          <p className="text-gray-400 text-xs md:text-sm font-light max-w-md mx-auto leading-relaxed">
+          <p className="text-gray-400 text-xs md:text-sm font-light max-w-md leading-relaxed">
             Landing centered on our vision, the deck sways dynamically and sways
             smoothly as you scroll down.
           </p>
         </div>
+
         {/* 3D Arc Card Arena */}
         <div className="relative w-full h-[55vh] md:h-[60vh] flex items-center justify-center">
+          {/* Transparent Horizontal Scroll Overlay */}
+          <div
+            ref={horizontalScrollRef}
+            onMouseDown={handleMouseDown}
+            onMouseLeave={handleMouseLeave}
+            onMouseUp={handleMouseUp}
+            onMouseMove={handleMouseMove}
+            className={`absolute inset-0 overflow-x-auto no-scrollbar z-[150] cursor-grab active:cursor-grabbing select-none ${isDraggingState ? "" : "snap-x snap-mandatory"}`}
+          >
+            <div className="flex h-full" style={{ width: "500%" }}>
+              {cardsData.map((_, idx) => (
+                <div
+                  key={idx}
+                  className="w-1/5 h-full flex-shrink-0 snap-center"
+                />
+              ))}
+            </div>
+          </div>
+
           {/* Card Carousel Deck */}
           <div className="relative w-full max-w-6xl h-full flex items-center justify-center">
             {cardsData.map((card, i) => {
               const spacing = isMobile ? 210 : 310;
               const angleVal = 7; // Curved tilt angle multiplier
 
-              // Custom reactive useTransform mapping both scroll state and auto-rotate ambient offset
-              const x = useTransform(scrollYProgress, (latestScroll) => {
-                // At scroll 0: Centered on middle card (i = 2)
-                // At scroll 0.5: Centered on rightmost card (i = 4)
-                // At scroll 1.0: Centered on leftmost card (i = 0)
-                let scrollOffset = 2;
-                if (latestScroll <= 0.5) {
-                  scrollOffset = 2 + (latestScroll / 0.5) * 2;
-                } else {
-                  scrollOffset = 4 - ((latestScroll - 0.5) / 0.5) * 4;
-                }
-                const currentOffset = scrollOffset + ambientAngle;
+              // Linear scrolling: maps scroll progress 0 to 1 directly to center card 0 through card 4
+              const x = useTransform(smoothScrollX, (latestScroll) => {
+                const currentOffset = latestScroll * (cardsData.length - 1);
                 const relPos = i - currentOffset;
                 return relPos * spacing;
               });
 
-              const y = useTransform(scrollYProgress, (latestScroll) => {
-                let scrollOffset = 2;
-                if (latestScroll <= 0.5) {
-                  scrollOffset = 2 + (latestScroll / 0.5) * 2;
-                } else {
-                  scrollOffset = 4 - ((latestScroll - 0.5) / 0.5) * 4;
-                }
-                const currentOffset = scrollOffset + ambientAngle;
+              const y = useTransform(smoothScrollX, (latestScroll) => {
+                const currentOffset = latestScroll * (cardsData.length - 1);
                 const relPos = i - currentOffset;
                 return Math.pow(relPos, 2) * 18 + (isMobile ? 10 : 25);
               });
 
-              const rotate = useTransform(scrollYProgress, (latestScroll) => {
-                let scrollOffset = 2;
-                if (latestScroll <= 0.5) {
-                  scrollOffset = 2 + (latestScroll / 0.5) * 2;
-                } else {
-                  scrollOffset = 4 - ((latestScroll - 0.5) / 0.5) * 4;
-                }
-                const currentOffset = scrollOffset + ambientAngle;
+              const rotate = useTransform(smoothScrollX, (latestScroll) => {
+                const currentOffset = latestScroll * (cardsData.length - 1);
                 const relPos = i - currentOffset;
                 return relPos * angleVal;
               });
 
-              const scale = useTransform(scrollYProgress, (latestScroll) => {
-                let scrollOffset = 2;
-                if (latestScroll <= 0.5) {
-                  scrollOffset = 2 + (latestScroll / 0.5) * 2;
-                } else {
-                  scrollOffset = 4 - ((latestScroll - 0.5) / 0.5) * 4;
-                }
-                const currentOffset = scrollOffset + ambientAngle;
+              const scale = useTransform(smoothScrollX, (latestScroll) => {
+                const currentOffset = latestScroll * (cardsData.length - 1);
                 const relPos = i - currentOffset;
                 return 1 - Math.min(0.3, Math.abs(relPos) * 0.08);
               });
 
-              const opacity = useTransform(scrollYProgress, (latestScroll) => {
-                let scrollOffset = 2;
-                if (latestScroll <= 0.5) {
-                  scrollOffset = 2 + (latestScroll / 0.5) * 2;
-                } else {
-                  scrollOffset = 4 - ((latestScroll - 0.5) / 0.5) * 4;
-                }
-                const currentOffset = scrollOffset + ambientAngle;
+              const opacity = useTransform(smoothScrollX, (latestScroll) => {
+                const currentOffset = latestScroll * (cardsData.length - 1);
                 const relPos = i - currentOffset;
                 return 1 - Math.min(0.6, Math.abs(relPos) * 0.25);
               });
 
-              const zIndex = useTransform(scrollYProgress, (latestScroll) => {
-                let scrollOffset = 2;
-                if (latestScroll <= 0.5) {
-                  scrollOffset = 2 + (latestScroll / 0.5) * 2;
-                } else {
-                  scrollOffset = 4 - ((latestScroll - 0.5) / 0.5) * 4;
-                }
-                const currentOffset = scrollOffset + ambientAngle;
+              const zIndex = useTransform(smoothScrollX, (latestScroll) => {
+                const currentOffset = latestScroll * (cardsData.length - 1);
                 const relPos = i - currentOffset;
                 return Math.round(100 - Math.abs(relPos) * 10);
               });
@@ -310,32 +332,32 @@ const About = () => {
             })}
           </div>
         </div>
+
         {/* Scroll Progress Indicator & Guide */}
         <div className="container mx-auto px-6 text-center z-20">
           <div className="flex flex-col items-center">
             <span className="text-[9px] font-black uppercase tracking-[0.25em] text-white/30 mb-2">
-              Deck Navigation Progress
+              Swipe or Scroll Horizontally
             </span>
 
             {/* Smooth animated progress track */}
             <div className="w-36 h-[2px] bg-white/10 relative overflow-hidden rounded-full">
               <motion.div
-                style={{ scaleX: scrollYProgress }}
+                style={{ scaleX: smoothScrollX }}
                 className="absolute inset-0 bg-[#ea222d] origin-left"
               />
             </div>
 
             {/* Scroll Indicator Icon */}
             <motion.div
-              animate={{ y: [0, 4, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
+              animate={{ x: [-4, 4, -4] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
               className="mt-4 text-white/20"
             >
-              <ArrowDown size={14} />
+              <ArrowRight size={14} />
             </motion.div>
           </div>
         </div>
-        z
       </div>
     </section>
   );

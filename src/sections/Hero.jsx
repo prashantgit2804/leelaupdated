@@ -1,7 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import logo from "../assets/images/logo.png";
-import back from "../assets/images/back.png"; // change extension if needed
 
 const Hero = () => {
   const handleCTA = () => {
@@ -24,7 +23,7 @@ const Hero = () => {
   return (
     <section
       id="hero"
-      className="relative min-h-screen overflow-hidden bg-black flex items-center"
+      className="relative min-h-screen overflow-hidden bg-transparent flex items-center"
     >
       {/* Logo Intro */}
       <div className="absolute inset-0 flex items-center justify-center z-40 pointer-events-none">
@@ -43,33 +42,6 @@ const Hero = () => {
             className="w-[45vw] max-w-[420px] object-contain"
           />
         </motion.div>
-      </div>
-
-      {/* Background Image */}
-      <div className="absolute inset-0 z-10 overflow-hidden">
-        <motion.img
-          src={back}
-          alt="Leela Films Background"
-          animate={{
-            scale: [1, 1.04, 1],
-          }}
-          transition={{
-            duration: 18,
-            repeat: Infinity,
-            repeatType: "reverse",
-            ease: "easeInOut",
-          }}
-          className="
-            absolute
-            right-0
-            top-0
-            h-full
-            w-auto
-            max-w-none
-            object-contain
-            opacity-90
-          "
-        />
       </div>
 
       {/* Overlays */}
@@ -99,7 +71,7 @@ const Hero = () => {
           </h2>
 
           <p className="text-gray-300 text-base md:text-lg leading-relaxed max-w-xl mb-10">
-            Welcome to Leela Films — a new-age entertainment and media
+            Welcome to Leela Films a new age entertainment and media
             ecosystem built on modern production systems, cultural
             authenticity, and the relentless pursuit of excellence.
           </p>
@@ -124,8 +96,6 @@ const Hero = () => {
               rounded-sm
               border-2
               border-black
-              shadow-[6px_6px_0px_0px_rgba(255,255,255,1)]
-              hover:shadow-none
               hover:translate-x-[6px]
               hover:translate-y-[6px]
               transition-all

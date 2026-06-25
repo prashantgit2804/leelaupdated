@@ -37,7 +37,7 @@ const Services = () => {
   const [activeIdx, setActiveIdx] = useState(0);
 
   return (
-    <section id="services" className="relative py-24 md:py-36 bg-primary overflow-hidden border-t border-white/5">
+    <section id="services" className="relative py-24 md:py-36 bg-transparent overflow-hidden border-t border-white/5">
       {/* Background visual transition based on active hovered service */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-20 transition-all duration-700">
         <AnimatePresence mode="wait">
@@ -52,19 +52,17 @@ const Services = () => {
             className="w-full h-full object-cover filter grayscale blur-[2px]"
           />
         </AnimatePresence>
-        <div className="absolute inset-0 bg-primary" />
+        <div className="absolute inset-0 bg-black/85" />
       </div>
 
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         {/* Title Block */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16 pb-6 border-b border-white/10">
-          <div>
-            <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-[#ea222d] block mb-2">WHAT WE DO</span>
-            <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tight">
-              SERVICES
-            </h2>
-          </div>
-          <p className="text-gray-400 text-sm font-light max-w-md leading-relaxed">
+        <div className="max-w-3xl mb-16 pb-6 border-b border-white/10">
+          <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-[#ea222d] block mb-2">WHAT WE DO</span>
+          <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tight mb-6">
+            SERVICES
+          </h2>
+          <p className="text-gray-400 text-sm font-light leading-relaxed">
             We provide comprehensive, end-to-end production solutions, taking ideas from raw creative concepts to fully realized, premium visual assets.
           </p>
         </div>

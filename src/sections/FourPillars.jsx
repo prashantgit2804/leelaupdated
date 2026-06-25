@@ -122,25 +122,23 @@ const FourPillars = () => {
         {activePillar.title.split(" ")[0]}
       </div>
 
-      <div className="container mx-auto px-6 md:px-12 relative z-10 max-w-6xl">
+      <div className="container mx-auto px-6 md:px-12 relative z-10">
         
         {/* Title Block */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16 pb-6 border-b border-white/10">
-          <div>
-            <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-[#ea222d] block mb-2">
-              [ THE CORE DNA ]
-            </span>
-            <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tight">
-              FOUR PILLARS
-            </h2>
-          </div>
-          <p className="text-gray-400 text-sm font-light max-w-md leading-relaxed">
+        <div className="max-w-3xl mb-16 pb-6 border-b border-white/10">
+          <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-[#ea222d] block mb-2">
+            THE CORE DNA
+          </span>
+          <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tight mb-6">
+            FOUR PILLARS
+          </h2>
+          <p className="text-gray-400 text-sm font-light leading-relaxed">
             The foundation of our execution, creativity, and daily mindset. At Leela Films, we do not build employees; we build hunters.
           </p>
         </div>
 
         {/* Main Review Card Slide Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch min-h-[460px]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch min-h-[460px] max-w-6xl mx-auto">
           
           {/* Left Navigation Details (3 cols) */}
           <div className="lg:col-span-3 flex flex-col justify-between py-4">

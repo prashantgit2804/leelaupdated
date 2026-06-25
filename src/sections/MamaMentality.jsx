@@ -3,27 +3,25 @@ import { motion } from "framer-motion";
 
 const MamaMentality = () => {
   return (
-    <section className="relative py-24 md:py-36 bg-primary overflow-hidden border-t border-white/5 flex items-center justify-center">
+    <section className="relative py-24 md:py-36 bg-transparent overflow-hidden border-t border-white/5 flex items-center justify-center">
       {/* Decorative large backdrop text for ambient editorial layering */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none pointer-events-none opacity-5 font-black text-[28vw] tracking-tighter uppercase whitespace-nowrap text-white">
         LEAD
       </div>
 
-      <div className="container mx-auto px-6 md:px-12 relative z-10 max-w-6xl">
-        <div className="flex flex-col items-center text-center">
+      <div className="container mx-auto px-6 md:px-12 relative z-10">
+        <div className="flex flex-col items-start text-left">
           {/* Section Indicator */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
-            className="mb-8 flex items-center gap-3"
+            className="mb-8 block"
           >
-            <span className="w-8 h-[1px] bg-[#ea222d]"></span>
             <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-[#ea222d]">
-              OUR DRIVE
+               OUR DRIVE 
             </span>
-            <span className="w-8 h-[1px] bg-[#ea222d]"></span>
           </motion.div>
 
           {/* The Big Quote Statement */}

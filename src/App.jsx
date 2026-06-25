@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Lenis from "lenis";
+import { motion } from "framer-motion";
+import back from "./assets/images/back.png";
 import Navbar from "./components/Navbar";
 import Hero from "./sections/Hero";
 import MamaMentality from "./sections/MamaMentality";
@@ -63,9 +65,39 @@ function App() {
   }, []);
 
   return (
-    <div className="bg-primary min-h-screen text-white font-sans selection:bg-[#ea222d] selection:text-white">
-      <Navbar />
-      <main>
+    <div className="bg-primary min-h-screen text-white font-sans selection:bg-[#ea222d] selection:text-white relative">
+      {/* Global Background Image */}
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <motion.img
+          src={back}
+          alt="Leela Films Background"
+          animate={{
+            scale: [1, 1.03, 1],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "easeInOut",
+          }}
+          className="
+            absolute
+            right-0
+            top-0
+            w-full
+            h-full
+            object-cover
+            opacity-70
+          "
+        />
+        {/* Global Overlays to ensure legibility and deep contrast */}
+        <div className="absolute inset-0 bg-black/65" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/90" />
+      </div>
+
+      <div className="relative z-10">
+        <Navbar />
+        <main>
         {/* Cinematic Header Landing */}
         <Hero />
 
@@ -96,6 +128,7 @@ function App() {
         {/* Corporate Address & Collaborative Infrastructure */}
         <Contact />
       </main>
+      </div>
 
       <VideoModal
         isOpen={!!selectedProject}

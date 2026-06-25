@@ -40,13 +40,13 @@ const Blogs = ({ blogs = [], onBlogClick }) => {
   };
 
   return (
-    <section id="blogs" className="py-24 md:py-36 bg-primary border-t border-white/5 relative">
+    <section id="blogs" className="py-24 md:py-36 bg-transparent border-t border-white/5 relative">
       <div className="container mx-auto px-6 md:px-12">
         
         {/* Section Header */}
         <div className="max-w-3xl mb-20">
           <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-[#ea222d] block mb-2">
-            [ STORIES & INSIGHTS ]
+            STORIES & INSIGHTS
           </span>
           <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tight mb-6">
             OUR BLOGS

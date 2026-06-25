@@ -39,7 +39,7 @@ const Navbar = () => {
   return (
     <>
       <nav className="fixed top-0 left-0 w-full z-[100] bg-transparent">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10 h-24 flex items-center justify-between">
+        <div className="w-full px-6 md:px-12 lg:px-16 xl:px-20 h-24 flex items-center justify-between">
           {/* Logo */}
           <motion.div
             initial={{ opacity: 0, y: -15 }}

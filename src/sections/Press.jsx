@@ -37,7 +37,7 @@ const pressData = [
 
 const Press = () => {
   return (
-    <section id="press" className="py-24 bg-primary overflow-hidden">
+    <section id="press" className="py-24 bg-transparent overflow-hidden">
       <div className="container mx-auto px-6 space-y-16">
         {pressData.map((item, index) => (
           <motion.div

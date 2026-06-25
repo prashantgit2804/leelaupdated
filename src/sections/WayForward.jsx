@@ -43,7 +43,7 @@ const verticalsData = [
 
 const WayForward = () => {
   return (
-    <section id="wayforward" className="py-24 md:py-36 bg-primary overflow-hidden border-t border-white/5">
+    <section id="wayforward" className="py-24 md:py-36 bg-transparent overflow-hidden border-t border-white/5">
       <div className="container mx-auto px-6 md:px-12">
         {/* Section Header */}
         <div className="max-w-3xl mb-20">

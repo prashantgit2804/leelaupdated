@@ -2,9 +2,15 @@ import React from "react";
 import { motion } from "framer-motion";
 
 const teamData = [
+    {
+    name: "Ujaas Patel",
+    role: "Founder",
+    bio: "Directing the creative vision, championing culturally rooted narratives, and orchestrating modern high-fidelity production pipelines.",
+    // image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop"
+  },
   {
     name: "Kumpal Patel",
-    role: "Managing Director",
+    role: "Founder & MD",
     bio: "Visionary entrepreneur shaping global entertainment pathways, pioneering creative integrity, and establishing the structural foundations of Leela Films.",
     // image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1887&auto=format&fit=crop"
   
@@ -15,19 +21,12 @@ const teamData = [
     bio: "Driving executive operations, leading strategic collaborations, and bridging original artistic execution with international industry partnerships.",
     // image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1887&auto=format&fit=crop"
   
-  },
-  {
-    name: "Ujaas Patel",
-    role: "Co-Founder",
-    bio: "Directing the creative vision, championing culturally rooted narratives, and orchestrating modern high-fidelity production pipelines.",
-    // image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop"
-  
   }
 ];
 
 const Team = () => {
   return (
-    <section id="team" className="py-24 md:py-36 bg-primary border-t border-white/5">
+    <section id="team" className="py-24 md:py-36 bg-transparent border-t border-white/5">
       <div className="container mx-auto px-6 md:px-12">
         
         {/* Section Header */}
@@ -67,7 +66,7 @@ const Team = () => {
               {/* Text Area */}
               <div className="p-6 md:p-8 flex-grow flex flex-col justify-between">
                 <div>
-                  <span className="text-[9px] font-mono tracking-widest text-[#ea222d] uppercase block mb-1">
+                  <span className="text-[15px] font-mono tracking-widest text-[#ea222d] uppercase block mb-1">
                     {member.role}
                   </span>
                   <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-3">
