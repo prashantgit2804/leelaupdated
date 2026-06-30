@@ -20,9 +20,9 @@ const VideoModal = ({ isOpen, project, onClose }) => {
           </button>
           <button 
             onClick={onClose}
-            className="w-10 h-10 rounded-full flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all"
+            className="w-11 h-11 rounded-full bg-white/[0.02] backdrop-blur-md border border-white/[0.08] hover:border-white/20 hover:bg-white/[0.07] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.5)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_8px_32px_rgba(234,34,45,0.1)] flex items-center justify-center text-white/70 hover:text-[#ea222d] transition-all duration-300 cursor-pointer"
           >
-            <X size={32} />
+            <X size={20} />
           </button>
         </div>
 
@@ -48,11 +48,11 @@ const VideoModal = ({ isOpen, project, onClose }) => {
             </div>
             
             {/* Side Navigation Arrows */}
-            <button className="absolute left-[-60px] top-1/2 -translate-y-1/2 hidden xl:flex text-white/30 hover:text-white transition-colors">
-              <ChevronLeft size={48} />
+            <button className="absolute left-[-70px] top-1/2 -translate-y-1/2 hidden xl:flex w-14 h-14 rounded-full bg-white/[0.02] backdrop-blur-md border border-white/[0.08] hover:border-white/20 hover:bg-white/[0.07] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.5)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_8px_32px_rgba(234,34,45,0.1)] items-center justify-center text-white/70 hover:text-[#ea222d] transition-all hover:scale-105 active:scale-95 cursor-pointer">
+              <ChevronLeft size={28} />
             </button>
-            <button className="absolute right-[-60px] top-1/2 -translate-y-1/2 hidden xl:flex text-white/30 hover:text-white transition-colors">
-              <ChevronRight size={48} />
+            <button className="absolute right-[-70px] top-1/2 -translate-y-1/2 hidden xl:flex w-14 h-14 rounded-full bg-white/[0.02] backdrop-blur-md border border-white/[0.08] hover:border-white/20 hover:bg-white/[0.07] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.5)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_8px_32px_rgba(234,34,45,0.1)] items-center justify-center text-white/70 hover:text-[#ea222d] transition-all hover:scale-105 active:scale-95 cursor-pointer">
+              <ChevronRight size={28} />
             </button>
           </div>
 

@@ -165,14 +165,14 @@ const FourPillars = () => {
               <div className="flex items-center gap-4">
                 <button
                   onClick={handlePrev}
-                  className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white/70 hover:text-[#ea222d] hover:border-[#ea222d]/40 transition-all hover:scale-105 active:scale-95 group bg-zinc-900/40 backdrop-blur-xs cursor-pointer"
+                  className="w-12 h-12 rounded-full bg-white/[0.02] backdrop-blur-md border border-white/[0.08] hover:border-white/20 hover:bg-white/[0.07] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.5)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_8px_32px_rgba(234,34,45,0.1)] flex items-center justify-center text-white/70 hover:text-[#ea222d] transition-all hover:scale-105 active:scale-95 group cursor-pointer"
                   aria-label="Previous Pillar"
                 >
                   <ArrowLeft size={18} className="group-hover:-translate-x-0.5 transition-transform" />
                 </button>
                 <button
                   onClick={handleNext}
-                  className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white/70 hover:text-[#ea222d] hover:border-[#ea222d]/40 transition-all hover:scale-105 active:scale-95 group bg-zinc-900/40 backdrop-blur-xs cursor-pointer"
+                  className="w-12 h-12 rounded-full bg-white/[0.02] backdrop-blur-md border border-white/[0.08] hover:border-white/20 hover:bg-white/[0.07] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.5)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_8px_32px_rgba(234,34,45,0.1)] flex items-center justify-center text-white/70 hover:text-[#ea222d] transition-all hover:scale-105 active:scale-95 group cursor-pointer"
                   aria-label="Next Pillar"
                 >
                   <ArrowRight size={18} className="group-hover:translate-x-0.5 transition-transform" />
@@ -208,7 +208,7 @@ const FourPillars = () => {
                 initial="enter"
                 animate="center"
                 exit="exit"
-                className="w-full bg-zinc-900/60 border border-white/10 backdrop-blur-md rounded-xl p-8 md:p-12 relative overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] flex flex-col justify-between gap-8 group"
+                className="w-full bg-zinc-900/40 border border-white/10 backdrop-blur-lg rounded-2xl p-8 md:p-12 relative overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),_0_30px_70px_rgba(0,0,0,0.8),_0_2px_10px_rgba(0,0,0,0.4)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),_0_35px_80px_rgba(0,0,0,0.9),_0_0_30px_rgba(234,34,45,0.1)] hover:border-[#ea222d]/30 transition-all duration-500 flex flex-col justify-between gap-8 group"
               >
                 {/* Visual Accent Borders */}
                 <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-[#ea222d] pointer-events-none opacity-60" />
@@ -265,7 +265,7 @@ const FourPillars = () => {
                     {activePillar.beliefs.map((belief, idx) => (
                       <div 
                         key={idx} 
-                        className="bg-zinc-950/30 border border-white/5 hover:border-[#ea222d]/20 transition-colors p-4 rounded-lg flex gap-3 group/item"
+                        className="bg-zinc-950/50 border border-white/5 hover:border-[#ea222d]/30 transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.05),_0_8px_24px_rgba(0,0,0,0.3)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),_0_12px_32px_rgba(0,0,0,0.4)] p-4 rounded-xl flex gap-3 group/item"
                       >
                         <div className="w-5 h-5 rounded-full bg-[#ea222d]/10 flex items-center justify-center text-[#ea222d] flex-shrink-0 group-hover/item:bg-[#ea222d] group-hover/item:text-white transition-colors duration-300">
                           <Check size={12} className="stroke-[3]" />
@@ -288,7 +288,7 @@ const FourPillars = () => {
             <div className="flex items-center gap-6">
               <button
                 onClick={handlePrev}
-                className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white/70 hover:text-[#ea222d] hover:border-[#ea222d]/40 transition-all hover:scale-105 active:scale-95 group bg-zinc-900/40 backdrop-blur-xs cursor-pointer"
+                className="w-12 h-12 rounded-full bg-white/[0.02] backdrop-blur-md border border-white/[0.08] hover:border-white/20 hover:bg-white/[0.07] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.5)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_8px_32px_rgba(234,34,45,0.1)] flex items-center justify-center text-white/70 hover:text-[#ea222d] transition-all hover:scale-105 active:scale-95 group cursor-pointer"
                 aria-label="Previous Pillar"
               >
                 <ArrowLeft size={18} />
@@ -311,7 +311,7 @@ const FourPillars = () => {
 
               <button
                 onClick={handleNext}
-                className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white/70 hover:text-[#ea222d] hover:border-[#ea222d]/40 transition-all hover:scale-105 active:scale-95 group bg-zinc-900/40 backdrop-blur-xs cursor-pointer"
+                className="w-12 h-12 rounded-full bg-white/[0.02] backdrop-blur-md border border-white/[0.08] hover:border-white/20 hover:bg-white/[0.07] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.5)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_8px_32px_rgba(234,34,45,0.1)] flex items-center justify-center text-white/70 hover:text-[#ea222d] transition-all hover:scale-105 active:scale-95 group cursor-pointer"
                 aria-label="Next Pillar"
               >
                 <ArrowRight size={18} />

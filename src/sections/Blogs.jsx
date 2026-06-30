@@ -63,7 +63,7 @@ const Blogs = ({ blogs = [], onBlogClick }) => {
           {showPrev && (
             <button
               onClick={() => scroll("left")}
-              className="absolute left-[-20px] top-[calc(50%-24px)] z-20 w-12 h-12 rounded-full bg-zinc-950/90 border border-white/10 flex items-center justify-center text-white/70 hover:text-[#ea222d] hover:border-[#ea222d]/40 transition-all hover:scale-105 active:scale-95 group shadow-2xl hidden md:flex cursor-pointer"
+              className="absolute left-[-20px] top-[calc(50%-24px)] z-20 w-12 h-12 rounded-full bg-white/[0.02] backdrop-blur-md border border-white/[0.08] hover:border-white/20 hover:bg-white/[0.07] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.5)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_8px_32px_rgba(234,34,45,0.1)] flex items-center justify-center text-white/70 hover:text-[#ea222d] transition-all hover:scale-105 active:scale-95 group hidden md:flex cursor-pointer"
               aria-label="Scroll Left"
             >
               <ChevronLeft size={20} className="group-hover:-translate-x-0.5 transition-transform" />
@@ -74,7 +74,7 @@ const Blogs = ({ blogs = [], onBlogClick }) => {
           {showNext && (
             <button
               onClick={() => scroll("right")}
-              className="absolute right-[-20px] top-[calc(50%-24px)] z-20 w-12 h-12 rounded-full bg-zinc-950/90 border border-white/10 flex items-center justify-center text-white/70 hover:text-[#ea222d] hover:border-[#ea222d]/40 transition-all hover:scale-105 active:scale-95 group shadow-2xl hidden md:flex cursor-pointer"
+              className="absolute right-[-20px] top-[calc(50%-24px)] z-20 w-12 h-12 rounded-full bg-white/[0.02] backdrop-blur-md border border-white/[0.08] hover:border-white/20 hover:bg-white/[0.07] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.5)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_8px_32px_rgba(234,34,45,0.1)] flex items-center justify-center text-white/70 hover:text-[#ea222d] transition-all hover:scale-105 active:scale-95 group hidden md:flex cursor-pointer"
               aria-label="Scroll Right"
             >
               <ChevronRight size={20} className="group-hover:translate-x-0.5 transition-transform" />
@@ -95,7 +95,7 @@ const Blogs = ({ blogs = [], onBlogClick }) => {
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ delay: index * 0.1, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                 onClick={() => onBlogClick(blog)}
-                className="bg-zinc-950 border border-white/5 flex flex-col group relative rounded-sm overflow-hidden cursor-pointer hover:border-[#ea222d]/30 transition-all duration-300 w-[300px] md:w-[380px] flex-shrink-0"
+                className="bg-zinc-950 border border-white/5 flex flex-col group relative rounded-2xl overflow-hidden cursor-pointer hover:border-[#ea222d]/30 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),_0_15px_35px_rgba(0,0,0,0.6)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),_0_20px_45px_rgba(0,0,0,0.8),_0_0_30px_rgba(234,34,45,0.08)] transition-all duration-300 w-[300px] md:w-[380px] flex-shrink-0"
               >
                 {/* Image Frame */}
                 <div className="relative aspect-[16/10] overflow-hidden bg-zinc-900 border-b border-white/5">

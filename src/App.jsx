@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Lenis from "lenis";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import back from "./assets/images/back.png";
 import Navbar from "./components/Navbar";
 import Hero from "./sections/Hero";
@@ -15,12 +15,29 @@ import Blogs from "./sections/Blogs";
 import Contact from "./sections/Contact";
 import VideoModal from "./components/VideoModal";
 import BlogModal from "./components/BlogModal";
+import Preloader from "./components/Preloader";
 import { api } from "./utils/api";
 
 function App() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedBlog, setSelectedBlog] = useState(null);
   const [blogs, setBlogs] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (isLoading) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+  }, [isLoading]);
 
   useEffect(() => {
     api
@@ -52,6 +69,8 @@ function App() {
       infinite: false,
     });
 
+    window.lenis = lenis;
+
     function raf(time) {
       lenis.raf(time);
       requestAnimationFrame(raf);
@@ -61,12 +80,18 @@ function App() {
 
     return () => {
       lenis.destroy();
+      window.lenis = null;
     };
   }, []);
 
   return (
-    <div className="bg-primary min-h-screen text-white font-sans selection:bg-[#ea222d] selection:text-white relative">
-      {/* Global Background Image */}
+    <>
+      <AnimatePresence>
+        {isLoading && <Preloader />}
+      </AnimatePresence>
+
+      <div className="bg-primary min-h-screen text-white font-sans selection:bg-[#ea222d] selection:text-white relative">
+        {/* Global Background Image */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
         <motion.img
           src={back}
@@ -142,6 +167,7 @@ function App() {
         onClose={() => setSelectedBlog(null)}
       />
     </div>
+    </>
   );
 }
 

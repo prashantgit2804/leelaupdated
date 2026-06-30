@@ -66,7 +66,7 @@ const CategoryRow = ({ category, onProjectClick, isFirst }) => {
         {showNext && (
           <button
             onClick={() => scroll("right")}
-            className="absolute right-[-24px] top-[calc(50%-28px)] z-20 w-12 h-12 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.1)] rounded-full flex items-center justify-center text-gray-800 hover:text-black transition-all opacity-0 group-hover:opacity-100 hidden md:flex border border-gray-100"
+            className="absolute right-[-24px] top-[calc(50%-28px)] z-20 w-12 h-12 rounded-full bg-white/[0.02] backdrop-blur-md border border-white/[0.08] hover:border-white/20 hover:bg-white/[0.07] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.5)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_8px_32px_rgba(234,34,45,0.1)] flex items-center justify-center text-white/70 hover:text-[#ea222d] transition-all opacity-0 group-hover:opacity-100 hidden md:flex cursor-pointer"
           >
             <ChevronRight size={24} />
           </button>

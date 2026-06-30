@@ -1,6 +1,19 @@
 import React, { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { Compass, Target, Zap, ArrowRight, Sparkles } from "lucide-react";
+import {
+  motion,
+  useTransform,
+  useSpring,
+  useMotionValue,
+  animate,
+} from "framer-motion";
+import {
+  Compass,
+  Target,
+  Zap,
+  Sparkles,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 
 const cardsData = [
   {
@@ -52,12 +65,25 @@ const cardsData = [
   },
 ];
 
+// Helper to wrap relative card positions seamlessly between [-N/2, N/2]
+const getWrappedRelativePos = (cardIndex, latestIndex, N) => {
+  const relPos = cardIndex - latestIndex;
+  const halfN = N / 2;
+  return ((((relPos + halfN) % N) + N) % N) - halfN;
+};
+
 const About = () => {
   const targetRef = useRef(null);
-  const horizontalScrollRef = useRef(null);
+  const containerRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
-  const [isDraggingState, setIsDraggingState] = useState(false);
-  const dragRef = useRef({ isDragging: false, startX: 0, scrollLeftStart: 0 });
+
+  // Initialize index at 2 (the middle card "Vision")
+  const index = useMotionValue(2);
+  const smoothIndex = useSpring(index, {
+    stiffness: 120,
+    damping: 22,
+    mass: 0.5,
+  });
 
   useEffect(() => {
     const handleResize = () => {
@@ -68,61 +94,109 @@ const About = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const { scrollXProgress } = useScroll({
-    container: horizontalScrollRef,
-  });
+  // Touch Swipe Gestures
+  const touchStartX = useRef(0);
+  const touchStartIndex = useRef(0);
+  const isSwiping = useRef(false);
 
-  // Spring physics overlay to smooth out drag and scroll movements
-  const smoothScrollX = useSpring(scrollXProgress, {
-    stiffness: 250, // very stiff spring for ultra-fast snaps
-    damping: 32,    // adjusted damping to eliminate overshoot
-    mass: 0.15      // ultra-light mass for instant response
-  });
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartIndex.current = index.get();
+    isSwiping.current = true;
+  };
 
-  // Scroll to the middle card (index 2) on mount to preserve the original symmetric 3D curved layout
+  const handleTouchMove = (e) => {
+    if (!isSwiping.current) return;
+    const deltaX = e.touches[0].clientX - touchStartX.current;
+    const cardWidth = window.innerWidth < 768 ? 200 : 320;
+    const newIndex = touchStartIndex.current - deltaX / cardWidth;
+    index.set(newIndex);
+  };
+
+  const handleTouchEnd = () => {
+    isSwiping.current = false;
+    // Snap to the nearest integer index
+    const target = Math.round(index.get());
+    animate(index, target, {
+      type: "spring",
+      stiffness: 150,
+      damping: 22,
+    });
+  };
+
+  // Trackpad horizontal scrolling & Shift + Wheel horizontal scrolling
   useEffect(() => {
-    if (horizontalScrollRef.current) {
-      const el = horizontalScrollRef.current;
-      // Delay slightly to ensure scrollWidth is fully calculated in layout
-      const timer = setTimeout(() => {
-        const maxScroll = el.scrollWidth - el.clientWidth;
-        el.scrollLeft = maxScroll / 2;
-      }, 50);
-      return () => clearTimeout(timer);
-    }
-  }, [isMobile]);
-
-  // Desktop click-and-drag to scroll horizontally
-  const handleMouseDown = (e) => {
-    const el = horizontalScrollRef.current;
+    const el = containerRef.current;
     if (!el) return;
-    dragRef.current = {
-      isDragging: true,
-      startX: e.pageX - el.offsetLeft,
-      scrollLeftStart: el.scrollLeft,
+
+    let wheelTimeout;
+
+    const handleWheel = (e) => {
+      // Prioritize horizontal scrolling deltaX
+      if (Math.abs(e.deltaX) > 1) {
+        e.preventDefault();
+        const current = index.get();
+        index.set(current + e.deltaX * 0.003);
+
+        clearTimeout(wheelTimeout);
+        wheelTimeout = setTimeout(() => {
+          const target = Math.round(index.get());
+          animate(index, target, {
+            type: "spring",
+            stiffness: 150,
+            damping: 22,
+          });
+        }, 150);
+      }
     };
-    setIsDraggingState(true);
+
+    el.addEventListener("wheel", handleWheel, { passive: false });
+    return () => {
+      el.removeEventListener("wheel", handleWheel);
+      clearTimeout(wheelTimeout);
+    };
+  }, [index]);
+
+  // Click handler to center target card
+  const handleCardClick = (cardIndex) => {
+    const currentTarget = index.get();
+    const N = cardsData.length;
+    const diff = cardIndex - (currentTarget % N);
+    const wrappedDiff = ((((diff + N / 2) % N) + N) % N) - N / 2;
+    const target = currentTarget + wrappedDiff;
+
+    animate(index, target, {
+      type: "spring",
+      stiffness: 120,
+      damping: 20,
+    });
   };
 
-  const handleMouseLeave = () => {
-    dragRef.current.isDragging = false;
-    setIsDraggingState(false);
+  // Controls Navigation
+  const handlePrev = () => {
+    const target = Math.round(index.get()) - 1;
+    animate(index, target, {
+      type: "spring",
+      stiffness: 120,
+      damping: 20,
+    });
   };
 
-  const handleMouseUp = () => {
-    dragRef.current.isDragging = false;
-    setIsDraggingState(false);
+  const handleNext = () => {
+    const target = Math.round(index.get()) + 1;
+    animate(index, target, {
+      type: "spring",
+      stiffness: 120,
+      damping: 20,
+    });
   };
 
-  const handleMouseMove = (e) => {
-    if (!dragRef.current.isDragging) return;
-    const el = horizontalScrollRef.current;
-    if (!el) return;
-    e.preventDefault();
-    const x = e.pageX - el.offsetLeft;
-    const walk = (x - dragRef.current.startX) * 1.5; // Scroll speed multiplier
-    el.scrollLeft = dragRef.current.scrollLeftStart - walk;
-  };
+  // Compute scale progress between 0 and 1 for the visual track
+  const progress = useTransform(smoothIndex, (latest) => {
+    const N = cardsData.length;
+    const wrapped = ((latest % N) + N) % N;
+    return wrapped / (N - 1);
+  });
 
   return (
     <section
@@ -147,66 +221,75 @@ const About = () => {
         </div>
 
         {/* 3D Arc Card Arena */}
-        <div className="relative w-full h-[55vh] md:h-[60vh] flex items-center justify-center">
-          {/* Transparent Horizontal Scroll Overlay */}
-          <div
-            ref={horizontalScrollRef}
-            onMouseDown={handleMouseDown}
-            onMouseLeave={handleMouseLeave}
-            onMouseUp={handleMouseUp}
-            onMouseMove={handleMouseMove}
-            className={`absolute inset-0 overflow-x-auto no-scrollbar z-[150] cursor-grab active:cursor-grabbing select-none ${isDraggingState ? "" : "snap-x snap-mandatory"}`}
-          >
-            <div className="flex h-full" style={{ width: "500%" }}>
-              {cardsData.map((_, idx) => (
-                <div
-                  key={idx}
-                  className="w-1/5 h-full flex-shrink-0 snap-center"
-                />
-              ))}
-            </div>
-          </div>
-
+        <div
+          ref={containerRef}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          className="relative w-full h-[55vh] md:h-[60vh] flex items-center justify-center touch-pan-y select-none pb-8 md:pb-12"
+        >
           {/* Card Carousel Deck */}
           <div className="relative w-full max-w-6xl h-full flex items-center justify-center">
             {cardsData.map((card, i) => {
               const spacing = isMobile ? 210 : 310;
               const angleVal = 7; // Curved tilt angle multiplier
 
-              // Linear scrolling: maps scroll progress 0 to 1 directly to center card 0 through card 4
-              const x = useTransform(smoothScrollX, (latestScroll) => {
-                const currentOffset = latestScroll * (cardsData.length - 1);
-                const relPos = i - currentOffset;
+              const x = useTransform(smoothIndex, (latest) => {
+                const relPos = getWrappedRelativePos(
+                  i,
+                  latest,
+                  cardsData.length,
+                );
                 return relPos * spacing;
               });
 
-              const y = useTransform(smoothScrollX, (latestScroll) => {
-                const currentOffset = latestScroll * (cardsData.length - 1);
-                const relPos = i - currentOffset;
-                return Math.pow(relPos, 2) * 18 + (isMobile ? 10 : 25);
+              const y = useTransform(smoothIndex, (latest) => {
+                const relPos = getWrappedRelativePos(
+                  i,
+                  latest,
+                  cardsData.length,
+                );
+                return Math.pow(relPos, 2) * 18 + (isMobile ? 5 : 10);
               });
 
-              const rotate = useTransform(smoothScrollX, (latestScroll) => {
-                const currentOffset = latestScroll * (cardsData.length - 1);
-                const relPos = i - currentOffset;
+              const rotate = useTransform(smoothIndex, (latest) => {
+                const relPos = getWrappedRelativePos(
+                  i,
+                  latest,
+                  cardsData.length,
+                );
                 return relPos * angleVal;
               });
 
-              const scale = useTransform(smoothScrollX, (latestScroll) => {
-                const currentOffset = latestScroll * (cardsData.length - 1);
-                const relPos = i - currentOffset;
+              const scale = useTransform(smoothIndex, (latest) => {
+                const relPos = getWrappedRelativePos(
+                  i,
+                  latest,
+                  cardsData.length,
+                );
                 return 1 - Math.min(0.3, Math.abs(relPos) * 0.08);
               });
 
-              const opacity = useTransform(smoothScrollX, (latestScroll) => {
-                const currentOffset = latestScroll * (cardsData.length - 1);
-                const relPos = i - currentOffset;
-                return 1 - Math.min(0.6, Math.abs(relPos) * 0.25);
+              const opacity = useTransform(smoothIndex, (latest) => {
+                const relPos = getWrappedRelativePos(
+                  i,
+                  latest,
+                  cardsData.length,
+                );
+                const absRel = Math.abs(relPos);
+                // Smoothly fade out near the boundary to hide the looping wraps
+                if (absRel > 2.0) {
+                  return Math.max(0, 1 - (absRel - 2.0) / 0.5) * 0.5;
+                }
+                return 1 - Math.min(0.6, absRel * 0.25);
               });
 
-              const zIndex = useTransform(smoothScrollX, (latestScroll) => {
-                const currentOffset = latestScroll * (cardsData.length - 1);
-                const relPos = i - currentOffset;
+              const zIndex = useTransform(smoothIndex, (latest) => {
+                const relPos = getWrappedRelativePos(
+                  i,
+                  latest,
+                  cardsData.length,
+                );
                 return Math.round(100 - Math.abs(relPos) * 10);
               });
 
@@ -221,7 +304,8 @@ const About = () => {
                     opacity,
                     zIndex,
                   }}
-                  className={`absolute w-[260px] md:w-[320px] h-[370px] md:h-[450px] rounded-2xl p-6 md:p-8 flex flex-col justify-between overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] border border-white/5 transition-all duration-300 pointer-events-auto ${card.bg}`}
+                  onClick={() => handleCardClick(i)}
+                  className={`absolute w-[260px] md:w-[320px] h-[370px] md:h-[450px] rounded-2xl p-6 md:p-8 flex flex-col justify-between overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),_0_30px_70px_-15px_rgba(0,0,0,0.9),_0_4px_15px_rgba(0,0,0,0.5)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),_0_35px_80px_-15px_rgba(0,0,0,0.95),_0_0_30px_rgba(234,34,45,0.15)] border border-white/5 hover:border-[#ea222d]/30 transition-[border-color,box-shadow,background-color] duration-300 pointer-events-auto cursor-pointer ${card.bg}`}
                 >
                   {/* Grayscale Backdrop Image for dark theme card */}
                   {card.image && (
@@ -335,27 +419,37 @@ const About = () => {
 
         {/* Scroll Progress Indicator & Guide */}
         <div className="container mx-auto px-6 text-center z-20">
-          <div className="flex flex-col items-center">
-            <span className="text-[9px] font-black uppercase tracking-[0.25em] text-white/30 mb-2">
-              Swipe or Scroll Horizontally
-            </span>
+          <div className="flex flex-col items-center gap-4">
+            {/* Progress Bar & Arrow Buttons controls */}
+            <div className="flex items-center gap-6">
+              <button
+                onClick={handlePrev}
+                className="w-11 h-11 rounded-full bg-white/[0.02] backdrop-blur-md border border-white/[0.08] hover:border-white/20 hover:bg-white/[0.07] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.5)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_8px_32px_rgba(234,34,45,0.1)] flex items-center justify-center text-white/70 hover:text-[#ea222d] transition-all duration-300 active:scale-95 cursor-pointer"
+                aria-label="Previous card"
+              >
+                <ChevronLeft size={18} />
+              </button>
 
-            {/* Smooth animated progress track */}
-            <div className="w-36 h-[2px] bg-white/10 relative overflow-hidden rounded-full">
-              <motion.div
-                style={{ scaleX: smoothScrollX }}
-                className="absolute inset-0 bg-[#ea222d] origin-left"
-              />
+              {/* Smooth animated progress track */}
+              <div className="w-36 h-[2px] bg-white/10 relative overflow-hidden rounded-full">
+                <motion.div
+                  style={{ scaleX: progress }}
+                  className="absolute inset-0 bg-[#ea222d] origin-left"
+                />
+              </div>
+
+              <button
+                onClick={handleNext}
+                className="w-11 h-11 rounded-full bg-white/[0.02] backdrop-blur-md border border-white/[0.08] hover:border-white/20 hover:bg-white/[0.07] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.5)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_8px_32px_rgba(234,34,45,0.1)] flex items-center justify-center text-white/70 hover:text-[#ea222d] transition-all duration-300 active:scale-95 cursor-pointer"
+                aria-label="Next card"
+              >
+                <ChevronRight size={18} />
+              </button>
             </div>
 
-            {/* Scroll Indicator Icon */}
-            <motion.div
-              animate={{ x: [-4, 4, -4] }}
-              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-              className="mt-4 text-white/20"
-            >
-              <ArrowRight size={14} />
-            </motion.div>
+            <span className="text-[9px] font-black uppercase tracking-[0.25em] text-white/30">
+              Click any card or swipe/scroll to explore
+            </span>
           </div>
         </div>
       </div>

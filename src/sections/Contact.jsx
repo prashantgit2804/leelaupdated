@@ -52,7 +52,7 @@ const Contact = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:col-span-7 bg-zinc-900/40 p-6 md:p-8 border border-white/5 rounded-sm backdrop-blur-sm"
+            className="lg:col-span-7 bg-zinc-900/30 p-6 md:p-8 border border-white/5 rounded-2xl backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),_0_15px_35px_rgba(0,0,0,0.6)]"
           >
             <div className="flex flex-col md:flex-row gap-8 md:gap-10">
               
@@ -137,7 +137,7 @@ const Contact = () => {
 
                     <button 
                       type="submit" 
-                      className="w-full md:w-auto px-8 py-3.5 bg-[#ea222d] text-white font-black text-xs tracking-[0.2em] uppercase rounded-sm border border-black hover:bg-white hover:text-black transition-all flex items-center justify-center gap-2"
+                      className="w-full md:w-auto px-8 py-3.5 bg-white/[0.02] backdrop-blur-md text-white font-black text-xs tracking-[0.2em] uppercase rounded-full border border-[#ea222d]/25 hover:border-[#ea222d]/60 hover:bg-white/[0.07] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_32px_rgba(234,34,45,0.06)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_8px_32px_rgba(234,34,45,0.2)] transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
                     >
                       Submit Inquiry <Send size={14} />
                     </button>
@@ -222,7 +222,7 @@ const Contact = () => {
 
                     <button 
                       type="submit" 
-                      className="w-full md:w-auto px-8 py-3.5 bg-[#ea222d] text-white font-black text-xs tracking-[0.2em] uppercase rounded-sm border border-black hover:bg-white hover:text-black transition-all flex items-center justify-center gap-2"
+                      className="w-full md:w-auto px-8 py-3.5 bg-white/[0.02] backdrop-blur-md text-white font-black text-xs tracking-[0.2em] uppercase rounded-full border border-[#ea222d]/25 hover:border-[#ea222d]/60 hover:bg-white/[0.07] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_32px_rgba(234,34,45,0.06)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_8px_32px_rgba(234,34,45,0.2)] transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
                     >
                       Apply Now <Send size={14} />
                     </button>
@@ -242,9 +242,9 @@ const Contact = () => {
             className="lg:col-span-5 space-y-8"
           >
             {/* Address Box */}
-            <div className="bg-zinc-900/40 p-8 border border-white/5 rounded-sm flex flex-col gap-6">
+            <div className="bg-zinc-900/30 p-8 border border-white/5 rounded-2xl flex flex-col gap-6 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),_0_15px_35px_rgba(0,0,0,0.6)]">
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-10 h-10 rounded-sm bg-[#ea222d]/10 flex items-center justify-center border border-[#ea222d]/20">
+                <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[#ea222d]/10 flex items-center justify-center border border-[#ea222d]/20">
                   <MapPin className="text-[#ea222d]" size={18} />
                 </div>
                 <div>
@@ -257,7 +257,7 @@ const Contact = () => {
               </div>
 
               {/* Google Map Embed (with custom dark theme filter applied) */}
-              <div className="w-full h-[180px] rounded-sm overflow-hidden border border-white/10 opacity-70 hover:opacity-100 transition-opacity duration-300">
+              <div className="w-full h-[180px] rounded-xl overflow-hidden border border-white/10 opacity-70 hover:opacity-100 transition-opacity duration-300">
                 <iframe
                   title="Leela Films Office Location"
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d117510.60350361367!2d72.48421808027732!3d23.020243734493375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e848aba5bd449%3A0x4fccd11d087798c9!2sAhmedabad%2C%20Gujarat%2C%20India!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
@@ -272,8 +272,8 @@ const Contact = () => {
             </div>
 
             {/* Direct Line Box */}
-            <div className="bg-zinc-900/40 p-8 border border-white/5 rounded-sm flex gap-4">
-              <div className="flex-shrink-0 w-10 h-10 rounded-sm bg-[#ea222d]/10 flex items-center justify-center border border-[#ea222d]/20">
+            <div className="bg-zinc-900/30 p-8 border border-white/5 rounded-2xl flex gap-4 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),_0_15px_35px_rgba(0,0,0,0.6)]">
+              <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[#ea222d]/10 flex items-center justify-center border border-[#ea222d]/20">
                 <Phone className="text-[#ea222d]" size={18} />
               </div>
               <div>
@@ -286,7 +286,7 @@ const Contact = () => {
             </div>
 
             {/* Business Email Info */}
-            <div className="p-8 border border-dashed border-white/10 rounded-sm flex flex-col gap-2">
+            <div className="p-8 border border-dashed border-white/10 rounded-2xl flex flex-col gap-2 bg-white/[0.01] shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)]">
               <span className="text-[9px] font-black tracking-widest text-[#ea222d] uppercase block">Direct Collaboration Inbox</span>
               <a href="mailto:collaborate@leelafilms.com" className="text-xl md:text-2xl font-black text-white hover:text-[#ea222d] transition-colors uppercase tracking-tight">
                 info@leelafilms.com

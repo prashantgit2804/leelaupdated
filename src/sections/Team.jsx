@@ -49,7 +49,7 @@ const Team = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ delay: index * 0.15, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="bg-zinc-950 border border-white/5 flex flex-col group relative rounded-sm overflow-hidden"
+              className="bg-zinc-950 border border-white/5 flex flex-col group relative rounded-2xl overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),_0_15px_35px_rgba(0,0,0,0.6)] hover:border-[#ea222d]/30 hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),_0_20px_45px_rgba(0,0,0,0.8),_0_0_30px_rgba(234,34,45,0.08)] transition-all duration-300"
             >
               {/* Image Frame 
               

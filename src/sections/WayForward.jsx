@@ -65,14 +65,14 @@ const WayForward = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               whileHover={{ y: -6, transition: { duration: 0.3 } }}
-              className={`p-8 md:p-10 rounded-sm border border-white/5 flex flex-col justify-between min-h-[320px] transition-all relative group shadow-[0px_4px_30px_rgba(0,0,0,0.4)] ${vertical.cols} ${vertical.bg}`}
+              className={`p-8 md:p-10 rounded-2xl border border-white/5 flex flex-col justify-between min-h-[320px] transition-all relative group shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),_0_15px_35px_rgba(0,0,0,0.6)] hover:border-[#ea222d]/30 hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),_0_20px_45px_rgba(0,0,0,0.8),_0_0_30px_rgba(234,34,45,0.08)] ${vertical.cols} ${vertical.bg}`}
             >
               {/* Corner Glow Accent on hover */}
               <div className="absolute top-0 right-0 w-[80px] h-[80px] bg-[#ea222d]/5 rounded-bl-full filter blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
               {/* Icon & Category Header */}
               <div className="flex justify-between items-start gap-4">
-                <div className="w-12 h-12 rounded-sm bg-[#ea222d]/10 flex items-center justify-center border border-[#ea222d]/20">
+                <div className="w-12 h-12 rounded-xl bg-[#ea222d]/10 flex items-center justify-center border border-[#ea222d]/20">
                   {vertical.icon}
                 </div>
                 <span className="text-[10px] font-mono tracking-widest text-[#ea222d]/60 group-hover:text-[#ea222d] transition-colors duration-300">

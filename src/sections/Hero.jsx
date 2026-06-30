@@ -7,16 +7,25 @@ const Hero = () => {
     const contactSection = document.getElementById("contact");
 
     if (contactSection) {
-      const yOffset = -80;
-      const y =
-        contactSection.getBoundingClientRect().top +
-        window.pageYOffset +
-        yOffset;
+      const isMobileView = window.innerWidth < 768;
+      const yOffset = isMobileView ? -45 : 15;
 
-      window.scrollTo({
-        top: y,
-        behavior: "smooth",
-      });
+      if (window.lenis) {
+        window.lenis.scrollTo(contactSection, {
+          offset: yOffset,
+          duration: 1.2,
+        });
+      } else {
+        const y =
+          contactSection.getBoundingClientRect().top +
+          window.pageYOffset +
+          yOffset;
+
+        window.scrollTo({
+          top: y,
+          behavior: "smooth",
+        });
+      }
     }
   };
 
@@ -25,25 +34,6 @@ const Hero = () => {
       id="hero"
       className="relative min-h-screen overflow-hidden bg-transparent flex items-center"
     >
-      {/* Logo Intro */}
-      <div className="absolute inset-0 flex items-center justify-center z-40 pointer-events-none">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: [0, 1, 1, 0] }}
-          transition={{
-            duration: 2.5,
-            times: [0, 0.2, 0.8, 1],
-            ease: "easeInOut",
-          }}
-        >
-          <img
-            src={logo}
-            alt="Leela Films Logo"
-            className="w-[45vw] max-w-[420px] object-contain"
-          />
-        </motion.div>
-      </div>
-
       {/* Overlays */}
       <div className="absolute inset-0 z-[15] bg-gradient-to-r from-black via-black/70 to-black/20" />
       <div className="absolute inset-0 z-[16] bg-gradient-to-b from-black/50 via-transparent to-black" />
@@ -78,28 +68,31 @@ const Hero = () => {
 
           <motion.button
             whileHover={{
-              scale: 1.05,
-              boxShadow: "0px 0px 25px rgba(234,34,45,0.5)",
+              scale: 1.03,
+              boxShadow: "0px 0px 30px rgba(234,34,45,0.35)",
             }}
             whileTap={{ scale: 0.98 }}
             onClick={handleCTA}
             className="
               px-8
               py-4
-              bg-[#ea222d]
+              bg-white/[0.02]
+              backdrop-blur-md
               text-white
               font-black
               text-xs
               md:text-sm
               tracking-[0.2em]
               uppercase
-              rounded-sm
-              border-2
-              border-black
-              hover:translate-x-[6px]
-              hover:translate-y-[6px]
+              rounded-full
+              border
+              border-[#ea222d]/25
+              hover:border-[#ea222d]/60
+              hover:bg-white/[0.07]
+              shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_32px_rgba(234,34,45,0.06)]
               transition-all
               duration-300
+              cursor-pointer
             "
           >
             Collaborate With Us
@@ -107,40 +100,6 @@ const Hero = () => {
         </motion.div>
       </div>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.5 }}
-        transition={{ delay: 4.5, duration: 1 }}
-        className="
-          absolute
-          bottom-10
-          left-1/2
-          -translate-x-1/2
-          z-20
-          flex
-          flex-col
-          items-center
-          gap-2
-          pointer-events-none
-        "
-      >
-        <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/50">
-          Scroll To Explore
-        </span>
-
-        <div className="w-[1px] h-10 bg-white/20 relative overflow-hidden">
-          <motion.div
-            animate={{ y: ["-100%", "100%"] }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            className="absolute left-0 top-0 w-full h-1/2 bg-[#ea222d]"
-          />
-        </div>
-      </motion.div>
     </section>
   );
 };
